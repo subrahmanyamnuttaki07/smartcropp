@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-Powered Vegetable Plant Disease Identification System using Convolutional Neural Networks (CNN). Supported crops: Tomato and Potato. Educational demonstration for B.Tech Computer Science.">
+    <title>FloraScan AI - Vegetable Disease Identification System</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="glow-bg"></div>
+
+    <!-- Main Wrapper -->
+    <div class="app-container">
+        <!-- Navigation Header -->
+        <header class="navbar">
+            <div class="brand">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>FloraScan <span>AI</span></h1>
+                    <p>Machine Learning for Smart Agriculture</p>
+                </div>
+            </div>
+            
+            <div class="nav-badges">
+                {% if model_trained %}
+                <span class="status-badge success" id="model-status-badge">
+                    <span class="pulse"></span> CNN Model Online
+                </span>
+                {% else %}
+                <span class="status-badge warning" id="model-status-badge">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Model Untrained
+                </span>
+                {% endif %}
+                <a href="#supported-crops-section" class="btn-icon" title="View Supported Crops">
+                    <i class="fa-solid fa-seedling"></i>
+                </a>
+                <a href="#metrics-section" class="btn-icon" title="View Evaluation Metrics">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </a>
+            </div>
+        </header>
+
+        <!-- Hero & Metrics Banner -->
+        <section class="hero-section">
+            <div class="hero-badge">
+                <i class="fa-solid fa-microscope"></i> AI-Powered Plant Disease Detection
+            </div>
+            <h2 class="hero-title">Vegetable's Plant Disease Detection & Classification</h2>
+            <p class="hero-subtitle">
+                Analyze digital leaf photographs of supported vegetable crops using a deep learning Convolutional Neural Network (CNN) pre-trained on PlantVillage benchmark datasets.
+            </p>
+
+            <!-- Metrics Cards Row -->
+            {% if metrics %}
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fa-solid fa-bullseye"></i></div>
+                    <div class="metric-info">
+                        <span class="metric-label">Model Accuracy</span>
+                        <span class="metric-value">{{ "%.2f"|format(metrics.accuracy * 100) }}%</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fa-solid fa-check-double"></i></div>
+                    <div class="metric-info">
+                        <span class="metric-label">Precision</span>
+                        <span class="metric-value">{{ "%.2f"|format(metrics.precision_weighted * 100) }}%</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fa-solid fa-rotate-left"></i></div>
+                    <div class="metric-info">
+                        <span class="metric-label">Recall</span>
+                        <span class="metric-value">{{ "%.2f"|format(metrics.recall_weighted * 100) }}%</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fa-solid fa-award"></i></div>
+                    <div class="metric-info">
+                        <span class="metric-label">F1-Score</span>
+                        <span class="metric-value">{{ "%.2f"|format(metrics.f1_score_weighted * 100) }}%</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Supported Crops Section -->
+        <section class="card supported-crops-section" id="supported-crops-section">
+            <div class="card-header">
+                <h3><i class="fa-solid fa-list-check"></i> Supported Crops & Disease Classes </h3>
+                <p>The model is trained specifically on the following vegetable species and pathological states:</p>
+            </div>
+            <div class="crops-grid">
+                <div class="crop-card">
+                    <div class="crop-header">
+                        <span class="crop-badge"><i class="fa-solid fa-pepper-hot"></i> Tomato</span>
+                        <h4>Solanum lycopersicum</h4>
+                    </div>
+                    <ul class="condition-list">
+                        <li><i class="fa-solid fa-circle-dot diseased"></i> Early Blight (Alternaria solani)</li>
+                        <li><i class="fa-solid fa-circle-dot diseased"></i> Late Blight (Phytophthora infestans)</li>
+                        <li><i class="fa-solid fa-circle-dot healthy"></i> Healthy Foliage</li>
+                    </ul>
+                </div>
+
+                <div class="crop-card">
+                    <div class="crop-header">
+                        <span class="crop-badge"><i class="fa-solid fa-carrot"></i> Potato</span>
+                        <h4>Solanum tuberosum</h4>
+                    </div>
+                    <ul class="condition-list">
+                        <li><i class="fa-solid fa-circle-dot diseased"></i> Early Blight (Alternaria solani)</li>
+                        <li><i class="fa-solid fa-circle-dot healthy"></i> Healthy Foliage</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Workbench Section -->
+        <main class="workbench-grid">
+            <!-- Left Upload Panel -->
+            <section class="card upload-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-cloud-arrow-up"></i> Upload Leaf Image</h3>
+                    <p>Supports JPG, PNG, WEBP (Max 16MB)</p>
+                </div>
+
+                <form id="prediction-form" action="/predict" method="POST" enctype="multipart/form-data">
+                    <div class="drop-zone" id="drop-zone">
+                        <input type="file" name="image" id="file-input" accept="image/*" required>
+                        <div class="drop-zone-content" id="drop-zone-prompt">
+                            <div class="upload-icon">
+                                <i class="fa-solid fa-file-image"></i>
+                            </div>
+                            <h4>Upload a vegetable leaf image</h4>
+                            <p>or <span class="browse-btn">Browse File</span> from device</p>
+                        </div>
+                        
+                        <!-- Client-Side Preview -->
+                        <div class="image-preview-container hidden" id="preview-container">
+                            <img id="image-preview" src="#" alt="Leaf Preview">
+                            <button type="button" class="btn-remove-img" id="btn-remove-img" title="Remove Image">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Alert message box -->
+                    <div class="alert-box hidden" id="alert-box">
+                        <i class="fa-solid fa-circle-exclamation alert-icon"></i>
+                        <span id="alert-message">Error message goes here</span>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="btn-submit" {% if not model_trained %}disabled{% endif %}>
+                        <span class="btn-text"><i class="fa-solid fa-wand-magic-sparkles"></i> Identify Disease</span>
+                        <span class="spinner hidden" id="submit-spinner"></span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Right Results Panel -->
+            <section class="card results-card" id="results-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-square-poll-vertical"></i> Diagnostic Report</h3>
+                    <span class="time-stamp" id="result-timestamp">Awaiting analysis...</span>
+                </div>
+
+                <!-- Initial Empty State -->
+                <div class="empty-state" id="empty-state">
+                    <div class="empty-icon"><i class="fa-solid fa-seedling"></i></div>
+                    <h4>No Image Analyzed Yet</h4>
+                    <p>Upload a vegetable leaf photo on the left panel and click <strong>Identify Disease</strong> to view deep learning model classification.</p>
+                </div>
+
+                <!-- Active Result Container -->
+                <div class="result-content hidden" id="result-content">
+                    <div class="result-header-row">
+                        <div class="disease-meta">
+                            <span class="severity-badge" id="res-severity-badge">Diseased</span>
+                            <div class="crop-disease-display">
+                                <div class="crop-tag"><i class="fa-solid fa-wheat-awn"></i> Crop: <strong id="res-crop-name">Tomato</strong></div>
+                                <h2 class="disease-title" id="res-disease-name">Early Blight</h2>
+                            </div>
+                        </div>
+                        <div class="confidence-circle" id="res-confidence-box">
+                            <span class="confidence-num" id="res-confidence-val">98.4%</span>
+                            <span class="confidence-label">Confidence</span>
+                        </div>
+                    </div>
+
+                    <!-- Confidence Progress Bar -->
+                    <div class="confidence-bar-container">
+                        <div class="confidence-bar-header">
+                            <span>Prediction Confidence</span>
+                            <span id="res-confidence-text">98.4%</span>
+                        </div>
+                        <div class="confidence-track">
+                            <div class="confidence-fill" id="res-confidence-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Details Grid -->
+                    <div class="details-grid">
+                        <div class="detail-box symptoms-box">
+                            <h4><i class="fa-solid fa-stethoscope"></i> Observed Symptoms</h4>
+                            <p id="res-symptoms">Brown concentric spots forming target patterns.</p>
+                        </div>
+
+                        <div class="detail-box treatment-box">
+                            <h4><i class="fa-solid fa-book-open-reader"></i> Educational Care Guidelines</h4>
+                            <p id="res-treatment">Apply copper-based sprays every 7-10 days.</p>
+                        </div>
+
+                        <div class="detail-box prevention-box">
+                            <h4><i class="fa-solid fa-shield-halved"></i> General Prevention Best Practices</h4>
+                            <p id="res-prevention">Rotate crops and avoid overhead sprinkler watering.</p>
+                        </div>
+                    </div>
+
+                    <!-- Educational Disclaimer Banner -->
+                    <div class="disclaimer-banner">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span><strong>Academic Disclaimer:</strong> Predictions and guidelines are generated for educational demonstration and preliminary identification purposes. Always consult a certified agricultural extension officer or agronomist for official field treatment decisions.</span>
+                    </div>
+
+                    <!-- Probability Breakdown Accordion -->
+                    <div class="probability-section">
+                        <h4><i class="fa-solid fa-chart-bar"></i> Probability Distribution Across Classes</h4>
+                        <div class="prob-list" id="res-prob-list">
+                            <!-- Dynamic probability bars -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Evaluation Metrics & Visualization Section -->
+        <section class="card metrics-details-section" id="metrics-section">
+            <div class="card-header">
+                <h3><i class="fa-solid fa-chart-line"></i> Model Performance & Test Evaluation Diagnostics</h3>
+                <p>Confusion Matrix & Accuracy/Loss Learning Curves saved during CNN training on real PlantVillage data</p>
+            </div>
+
+            <div class="visuals-grid">
+                <div class="visual-card">
+                    <h4>Training & Validation Accuracy/Loss Curves</h4>
+                    <div class="img-wrapper">
+                        <img src="{{ url_for('static', filename='training_history.png') }}" 
+                             alt="Training Accuracy and Loss History" 
+                             onerror="this.src='https://via.placeholder.com/600x300?text=Train+model+with+python+train.py+to+generate+plots'">
+                    </div>
+                </div>
+
+                <div class="visual-card">
+                    <h4>Test Set Confusion Matrix Heatmap</h4>
+                    <div class="img-wrapper">
+                        <img src="{{ url_for('static', filename='confusion_matrix.png') }}" 
+                             alt="Confusion Matrix Heatmap" 
+                             onerror="this.src='https://via.placeholder.com/600x300?text=Train+model+with+python+train.py+to+generate+plots'">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>FloraScan AI - Vegetable's Plant Disease Identification System | B.Tech Computer Science Machine Learning Project</p>
+            <p>Built with Python, TensorFlow / Keras (MobileNetV2 Transfer Learning) & Flask</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
