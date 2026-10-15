@@ -1,0 +1,22 @@
+{
+    "test_accuracy": 87.33,
+    "weighted_precision": 90.07,
+    "weighted_recall": 87.33,
+    "weighted_f1": 87.08,
+    "supported_crops": {
+        "Potato": [
+            "Early Blight",
+            "Healthy"
+        ],
+        "Tomato": [
+            "Early Blight",
+            "Late Blight",
+            "Healthy"
+        ]
+    },
+    "overfitting_analysis": {
+        "training_acc": 98.5,
+        "validation_acc": 87.33,
+        "gap": 11.17
+    }
+}

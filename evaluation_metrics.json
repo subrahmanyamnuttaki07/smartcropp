@@ -1,0 +1,51 @@
+{
+    "accuracy": 0.959409594095941,
+    "precision_weighted": 0.9594279780366342,
+    "recall_weighted": 0.959409594095941,
+    "f1_score_weighted": 0.9592120419656562,
+    "per_class": {
+        "Potato___Early_blight": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 60.0
+        },
+        "Potato___healthy": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 31.0
+        },
+        "Tomato___Early_blight": {
+            "precision": 0.9473684210526315,
+            "recall": 0.9,
+            "f1-score": 0.9230769230769231,
+            "support": 60.0
+        },
+        "Tomato___Late_blight": {
+            "precision": 0.9016393442622951,
+            "recall": 0.9166666666666666,
+            "f1-score": 0.9090909090909091,
+            "support": 60.0
+        },
+        "Tomato___healthy": {
+            "precision": 0.967741935483871,
+            "recall": 1.0,
+            "f1-score": 0.9836065573770492,
+            "support": 60.0
+        },
+        "accuracy": 0.959409594095941,
+        "macro avg": {
+            "precision": 0.9633499401597595,
+            "recall": 0.9633333333333333,
+            "f1-score": 0.9631548779089764,
+            "support": 271.0
+        },
+        "weighted avg": {
+            "precision": 0.9594279780366342,
+            "recall": 0.959409594095941,
+            "f1-score": 0.9592120419656562,
+            "support": 271.0
+        }
+    }
+}
